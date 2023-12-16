@@ -9,10 +9,13 @@ import {
   deleteUser,
   getUserById,
   updateUser,
+  authEmail, sendEmailSend,
 } from '../controllers/userController.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
 router.route('/').post(registerUser).get(protect, admin, getUsers)
+router.route('/send-otp').post(sendEmailSend)
+router.route('/auth-email').post(authEmail)
 router.post('/login', authUser)
 router
   .route('/profile')

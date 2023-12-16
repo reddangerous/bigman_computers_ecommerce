@@ -1,7 +1,7 @@
 import asyncHandler from 'express-async-handler'
 import generateToken from '../utils/generateToken.js'
 import User from '../models/userModel.js'
-
+import sendEmail from '../utils/sendEmail.js'
 // @desc    Auth user & get token
 // @route   POST /api/users/login
 // @access  Public
@@ -24,6 +24,31 @@ const authUser = asyncHandler(async (req, res) => {
   }
 })
 
+const sendEmailSend = asyncHandler(async (req, res) => {
+  const { email } = req.body
+  if (email) {
+    sendEmail(email);
+    res.status(200).json({ message: 'OTP sent successfully' });
+  } else {
+    res.status(401)
+    throw new Error('Invalid email')
+  }
+})
+
+const authEmail = asyncHandler(async (req, res) => {
+  const { email, otp } = req.body;
+  if (email && otp) {
+    if (otpStore[email] == otp) {
+      res.status(200).json({ message: 'Email verified' });
+    } else {
+      res.status(401).json({ message: 'Invalid OTP' });
+    }
+  } else {
+    res.status(401).json({ message: 'Invalid email or OTP' });
+  }
+})
+
+
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
@@ -37,10 +62,12 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('User already exists')
   }
 
+  //modify this to add the  otp sent to user inside the user model
   const user = await User.create({
     name,
     email,
     password,
+
   })
 
   if (user) {
@@ -175,4 +202,5 @@ export {
   deleteUser,
   getUserById,
   updateUser,
+  authEmail,sendEmailSend
 }
