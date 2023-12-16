@@ -24,6 +24,8 @@ import {
   USER_UPDATE_FAIL,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_REQUEST,
+  EMAIL_AUTH_SUCCESS,
+  OTP_EMAIL_SUCCESS
 } from '../constants/userConstants'
 import { ORDER_LIST_MY_RESET } from '../constants/orderConstants'
 
@@ -70,6 +72,70 @@ export const logout = () => (dispatch) => {
   dispatch({ type: USER_LIST_RESET })
 }
 
+export const sendEmailSend = (email) => async (dispatch) => {
+  try{
+    dispatch({
+      type: USER_REGISTER_REQUEST,
+    })
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+    const{mail}=await axios.post(
+      '/api/users/send-otp',
+      { email },
+      config
+    )
+    dispatch({
+      type: OTP_EMAIL_SUCCESS,
+      payload: mail,
+    })
+  }
+    catch (error){
+      dispatch({
+        type: USER_REGISTER_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      })
+    }
+  }
+  export const authEmail = (email, otp) => async (dispatch) => {
+    try{
+      dispatch({
+        type: USER_REGISTER_REQUEST,
+      })
+  
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    const { otp } = await axios.post(
+      '/api/users/auth-email',
+      { email, otp },
+      config
+    )
+    dispatch({
+      type: EMAIL_AUTH_SUCCESS,
+      payload: otp,
+    })
+  }
+  catch (error){
+    dispatch({
+      type: USER_REGISTER_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  
+  }
+ 
+  }
 export const register = (name, email, password) => async (dispatch) => {
   try {
     dispatch({
@@ -87,6 +153,7 @@ export const register = (name, email, password) => async (dispatch) => {
       { name, email, password },
       config
     )
+    
 
     dispatch({
       type: USER_REGISTER_SUCCESS,

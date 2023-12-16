@@ -5,17 +5,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import FormContainer from '../components/FormContainer'
-import { register } from '../actions/userActions'
+import { register, sendEmailSend, authEmail } from '../actions/userActions'
+
 
 const RegisterScreen = ({ location, history }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [otp, setOTP] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState(null)
 
   const dispatch = useDispatch()
-
   const userRegister = useSelector((state) => state.userRegister)
   const { loading, error, userInfo } = userRegister
 
@@ -33,8 +34,14 @@ const RegisterScreen = ({ location, history }) => {
       setMessage('Passwords do not match')
     } else {
       dispatch(register(name, email, password))
+      dispatch(authEmail(email, otp))
     }
   }
+const sendOtp = (e) => {
+    e.preventDefault()
+    dispatch(sendEmailSend(email))
+  }
+
 
   return (
     <FormContainer>
@@ -61,8 +68,17 @@ const RegisterScreen = ({ location, history }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           ></Form.Control>
+          <Button onClick={sendOtp}  variant='primary'> Send Otp</Button>
         </Form.Group>
-
+        <Form.Group controlId='otp'>
+          <Form.Label> Otp</Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='Enter otp'
+            value={otp}
+            onChange={(e) => setOTP(e.target.value)}
+          ></Form.Control>
+        </Form.Group>
         <Form.Group controlId='password'>
           <Form.Label>Password Address</Form.Label>
           <Form.Control
