@@ -127,19 +127,35 @@ const Header = () => {
                </Button>
               )}
                 {isOpen &&( 
-                <div className='fixed animate-in slide-in-from-top-5 fade-in-20 inset-0 z-0 w-full'>
-               <ul className='absolute bg-white border-b border-zinc-200 shadow-xl grid w-full gap-3 px-10 pt-20 pb-8'>
-                <li>
-                  <a href='/admin/userlist' className='text-2xl font-bold text-zinc-900 hover:text-zinc-700'>Users </a>
-                </li>
-                <li>
-                  <a href='/admin/productlist' className='text-2xl font-bold text-zinc-900 hover:text-zinc-700'>Products </a>
-                  <li>
-                    <a href='/admin/orderlist' className='text-2xl font-bold text-zinc-900 hover:text-zinc-700'>Orders </a>
+              <div>
+              <div style={{position: 'absolute', top: '100%'
+              , left: '0', width: '100%', backgroundColor: '#1e2329', color: '#f0b90b', zIndex: '50'
+            }}>
+                <ul style={{listStyle: 'none'}}>
+                  <li style={{textDecoration: 'none'}}>
+                    <a href='/admin/userlist' style={{textDecoration: 'none', color: '#f0b90b',
+              fontSize: '1rem',
+              fontWeight: '900',}}>Users</a>
                   </li>
+                  <li style={{listStyle: 'none'}}>
+                    <a href='/admin/productlist'  style={{textDecoration: 'none',
+                  color: '#f0b90b',
+                  fontSize: '1rem',
+                  fontWeight: '900',
+                  }}>Products</a>
+                  </li>
+                  <li style={{listStyle: 'none'}}>
+                    <a href='/admin/orderlist' style={{textDecoration: 'none'
+                  ,color: '#f0b90b',
+                  fontSize: '1rem',
+                  fontWeight: '900',
+                  }}>Orders</a>
                   </li>
                 </ul>
-                </div>
+              </div>
+            </div>
+            
+            
               )}
             </Nav>
           </Navbar.Collapse>
