@@ -2,17 +2,27 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { LinkContainer } from 'react-router-bootstrap'
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
+import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap'
 import SearchBox from './SearchBox'
 import { logout } from '../actions/userActions'
-import { ShoppingCart, UserRoundCog } from 'lucide-react'
+import { ChevronDown, ShoppingCart, UserRoundCog } from 'lucide-react'
 import '../index.css'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import {  LockKeyhole  } from 'lucide-react'
 
 const Header = () => {
   const dispatch = useDispatch()
-
+  const location = useLocation()
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+  const [isOpen, setIsOpen] = React.useState(false);
+  const toggleOpen = () => setIsOpen((prev) => !prev)
+  useEffect(() => {
+    if (isOpen) toggleOpen()
+  }, [location.pathname])
+
+
 
   const logoutHandler = () => {
     dispatch(logout())
@@ -96,18 +106,40 @@ const Header = () => {
                   </Nav.Link>
                 </LinkContainer>
               )}
-              {userInfo && userInfo.isAdmin && (
-                <NavDropdown title='Admin' id='adminmenu' style={{backgroundColor: '#1e2329' , color:'#f0b90b'}}>
-                  <LinkContainer to='/admin/userlist'>
-                    <NavDropdown.Item style={{color: '#f0b90b'}} >Users</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to='/admin/productlist'>
-                    <NavDropdown.Item style={{color: '#f0b90b'}}>Products</NavDropdown.Item>
-                  </LinkContainer>
-                  <LinkContainer to='/admin/orderlist'>
-                    <NavDropdown.Item style={{color: '#f0b90b'}}>Orders</NavDropdown.Item>
-                  </LinkContainer>
-                </NavDropdown>
+              {userInfo && userInfo.isAdmin &&(
+                <Button
+                style={{ backgroundColor: '#1e2329', border: 'none' }}
+                onClick={toggleOpen}
+                className='d-flex align-items-center z-50 h-5 w-5'
+              ><LockKeyhole style={{ color: '#f0b90b' }}/>
+               <p 
+                 style= {{
+              color: '#f0b90b',
+              fontSize: '1rem',
+              fontWeight: '900',
+              textDecoration: 'none',
+              verticalAlign: 'middle',
+              paddingTop: '20px',
+              paddingLeft: '5px',
+            }}>Admin
+          </p>
+          <ChevronDown style={{ color: '#f0b90b' }} />
+               </Button>
+              )}
+                {isOpen &&( 
+                <div className='fixed animate-in slide-in-from-top-5 fade-in-20 inset-0 z-0 w-full'>
+               <ul className='absolute bg-white border-b border-zinc-200 shadow-xl grid w-full gap-3 px-10 pt-20 pb-8'>
+                <li>
+                  <a href='/admin/userlist' className='text-2xl font-bold text-zinc-900 hover:text-zinc-700'>Users </a>
+                </li>
+                <li>
+                  <a href='/admin/productlist' className='text-2xl font-bold text-zinc-900 hover:text-zinc-700'>Products </a>
+                  <li>
+                    <a href='/admin/orderlist' className='text-2xl font-bold text-zinc-900 hover:text-zinc-700'>Orders </a>
+                  </li>
+                  </li>
+                </ul>
+                </div>
               )}
             </Nav>
           </Navbar.Collapse>
