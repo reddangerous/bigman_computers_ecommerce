@@ -17,9 +17,14 @@ const Header = () => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isProfileOpen, setIsProfileOpen] = React.useState(false);
+
+  const toggleProfileOpen = () => setIsProfileOpen((prev) => !prev)
+
   const toggleOpen = () => setIsOpen((prev) => !prev)
   useEffect(() => {
     if (isOpen) toggleOpen()
+    if (isProfileOpen) toggleProfileOpen()
   }, [location.pathname])
 
 
@@ -41,8 +46,8 @@ const Header = () => {
               textDecoration: 'none',
             }}>BigManComputers
           </a>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
-          <Navbar.Collapse id='basic-navbar-nav'>
+          <Navbar.Toggle aria-controls='basic-navbar-nav' className="custom-toggler"/>
+          <Navbar.Collapse id='basic-navbar-nav' style={{color: '#f0b90b'}}>
             <Route render={({ history }) => <SearchBox history={history} />} />
             <Nav className='ml-auto'>
               <LinkContainer to='/cart'>
@@ -61,11 +66,35 @@ const Header = () => {
           </p>
                 </Nav.Link>
               </LinkContainer>
-              {userInfo ? (
-                <NavDropdown title={userInfo.name} id='username'style= {{
-                  color: '#f0b90b', backgroundColor: '#1e2329',}} >
+              {userInfo && (
+                <Button  id='username'style= {{
+                  color: '#f0b90b', backgroundColor: '#1e2329',}}
+                  onClick={toggleProfileOpen}
+                  className='d-flex align-items-center z-50 h-5 w-5 '
+                  ><UserRoundCog style={{
+                    color: '#f0b90b',
+                  }}/> 
+                     <p 
+                 style= {{
+              color: '#f0b90b',
+              fontSize: '1rem',
+              fontWeight: '900',
+              textDecoration: 'none',
+              verticalAlign: 'middle',
+              paddingTop: '20px',
+              paddingLeft: '5px',
+            }}>{userInfo.name}
+          </p>
+          <ChevronDown style={{ color: '#f0b90b' }} />
+            </Button>
+            )}
+            {isProfileOpen &&(
+              <div >
+                <div style={{position: 'absolute', top: '100%'
+              , left: '0', width: '100%', backgroundColor: '#1e2329', color: '#f0b90b', zIndex: '50'
+            }}>
                   <LinkContainer to='/profile' >
-                    <NavDropdown.Item  className='d-flex align-items-center'>
+                    <NavDropdown.Item  className='d-flex align-items-left'>
                     <p 
                  style= {{
               color: '#f0b90b',
@@ -76,7 +105,7 @@ const Header = () => {
           </p>
                     </NavDropdown.Item>
                   </LinkContainer>
-                  <NavDropdown.Item onClick={logoutHandler} className='d-flex align-items-center' >
+                  <NavDropdown.Item onClick={logoutHandler} className='d-flex align-items-left' >
                   <p 
                  style= {{
               color: '#f0b90b',
@@ -87,8 +116,10 @@ const Header = () => {
             }}>Logout
           </p>
                   </NavDropdown.Item>
-                </NavDropdown>
-              ) : (
+                </div>
+                </div>
+              )}
+              {!userInfo && (
                 <LinkContainer to='/login'>
                   <Nav.Link  className='d-flex align-items-center'>
                   <UserRoundCog style={{
@@ -127,33 +158,37 @@ const Header = () => {
                </Button>
               )}
                 {isOpen &&( 
-              <div>
               <div style={{position: 'absolute', top: '100%'
               , left: '0', width: '100%', backgroundColor: '#1e2329', color: '#f0b90b', zIndex: '50'
             }}>
-                <ul style={{listStyle: 'none'}}>
-                  <li style={{textDecoration: 'none'}}>
-                    <a href='/admin/userlist' style={{textDecoration: 'none', color: '#f0b90b',
+                <LinkContainer to='/admin/userlist' >
+                    <NavDropdown.Item  className='d-flex align-items-left'>
+                    <p style={{textDecoration: 'none', color: '#f0b90b',
               fontSize: '1rem',
-              fontWeight: '900',}}>Users</a>
-                  </li>
-                  <li style={{listStyle: 'none'}}>
-                    <a href='/admin/productlist'  style={{textDecoration: 'none',
+              fontWeight: '900',}}>Users</p>
+                  </NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to = '/admin/productlist'>
+                  <NavDropdown.Item  className='d-flex align-items-left'>
+                    <p style={{textDecoration: 'none',
                   color: '#f0b90b',
                   fontSize: '1rem',
                   fontWeight: '900',
-                  }}>Products</a>
-                  </li>
-                  <li style={{listStyle: 'none'}}>
-                    <a href='/admin/orderlist' style={{textDecoration: 'none'
+                  }}>Products</p>
+                  </NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to = '/admin/orderlist'>
+                    <NavDropdown.Item  className='d-flex align-items-left'>
+                    <p  style={{textDecoration: 'none'
                   ,color: '#f0b90b',
                   fontSize: '1rem',
                   fontWeight: '900',
-                  }}>Orders</a>
-                  </li>
-                </ul>
+                  }}>Orders</p>
+                </NavDropdown.Item>
+                </LinkContainer>  
+                
               </div>
-            </div>
+           
             
             
               )}
