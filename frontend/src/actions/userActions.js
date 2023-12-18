@@ -103,28 +103,26 @@ export const sendEmailSend = (email) => async (dispatch) => {
       })
     }
   }
-  export const authEmail = (email, otp) => async (dispatch) => {
-    try{
-      dispatch({
-        type: USER_REGISTER_REQUEST,
-      })
-  
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    const { otp } = await axios.post(
+ export const authEmail = (email, otp) => async (dispatch) => {
+  try{
+    dispatch({
+      type: EMAIL_AUTH_SUCCESS,
+    })
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+    const{mail}=await axios.post(
       '/api/users/auth-email',
-      { email, otp },
+      { email , otp},
       config
     )
     dispatch({
-      type: EMAIL_AUTH_SUCCESS,
-      payload: otp,
+      type: OTP_EMAIL_SUCCESS,
+      payload: mail,
     })
-  }
-  catch (error){
+  }catch(error){
     dispatch({
       type: USER_REGISTER_FAIL,
       payload:
@@ -132,10 +130,9 @@ export const sendEmailSend = (email) => async (dispatch) => {
           ? error.response.data.message
           : error.message,
     })
-  
   }
- 
-  }
+ }
+
 export const register = (name, email, password) => async (dispatch) => {
   try {
     dispatch({

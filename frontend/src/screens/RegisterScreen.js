@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Form, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,17 +11,19 @@ import { register, sendEmailSend, authEmail } from '../actions/userActions'
 
 
 
+
 const RegisterScreen = ({ location, history }) => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [otp, setOTP] = useState('')
+  const otpRef = useRef()
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState(null)
   const [isSubmitDisabled, setisSubmitDisabled] = useState(true)
   const [retryCountdown, setRetryCountdown] = useState(60);
-  const [isCountdownActive, setIsCountdownActive] = useState(false);
-
+  const [isButtonclicked, setisButtonclicked] = useState(false)
+  const [iscountDown, setiscountDown] = useState(false)
+  const [isSendOtp, setisSendOtp] = useState(true)
   const dispatch = useDispatch()
   const userRegister = useSelector((state) => state.userRegister)
   const { loading, error, userInfo } = userRegister
@@ -40,6 +42,7 @@ const RegisterScreen = ({ location, history }) => {
       setMessage('Passwords do not match')
     } else {
       dispatch(register(name, email, password))
+      dispatch(authEmail(email, otpRef.current.value))
       setisSubmitDisabled(false)
     }
   }
@@ -47,33 +50,34 @@ const sendOtp = (e) => {
     e.preventDefault()
     dispatch(sendEmailSend(email))
     setMessage('Otp sent to your email')
-    setIsCountdownActive(true);
+    setisButtonclicked(true)
+    setiscountDown(true)
+    setisSendOtp(false)
   }
 const checkOtp = () => {
- const otpCorrect = dispatch(authEmail(email, otp));
-
- if(otpCorrect){
-  setisSubmitDisabled(false)
-  setMessage('Otp is correct')
-  setisSubmitDisabled(false)
-  return
- }
-  else{ 
+ const otpCorrect = dispatch(authEmail(email, otpRef.current.value));
+  if (otpCorrect) {
+    setisSubmitDisabled(true)
+    return
+  }
+  setisSubmitDisabled(true)
+  
   setMessage('Otp is incorrect please retry or resend otp')
   setisSubmitDisabled(true)
-  }
+  
 }
 useEffect(() => {
-  const interval = setInterval(() => {
-    setRetryCountdown((prevCountdown) => (prevCountdown > 0 ? prevCountdown - 1 : 0));
-  }, 1000);
-
-  return () => {
-    clearInterval(interval);
-    setisSubmitDisabled(false); 
-  };
-}, [isCountdownActive]);
-
+  if (isButtonclicked) {
+    const interval = setInterval(() => {
+      setRetryCountdown((prevCountdown) => (prevCountdown > 0 ? prevCountdown - 1 : 0));
+    }, 1000);
+  
+    return () => {
+      clearInterval(interval);
+      setisSendOtp(true); 
+    };
+  }
+}, [isButtonclicked]);
 
 
   return (
@@ -106,13 +110,17 @@ useEffect(() => {
               />
             </Col>
             <Col>
-            {isSubmitDisabled && (
+            {isSendOtp && (
               <Button onClick={sendOtp}>Send OTP</Button>
             )}
             </Col>
           </Row>
+          {iscountDown && (
+            <>
           {retryCountdown > 0 && (
             <p>{`Didn't receive code? Retry in ${retryCountdown}s`}</p>
+          )}
+          </>
           )}
         </Form.Group>
         <Form.Group controlId='otp'>
@@ -123,8 +131,7 @@ useEffect(() => {
           <Form.Control
             type='text'
             placeholder='Enter otp'
-            value={otp}
-            onChange={(e) => setOTP(e.target.value)}
+            ref={otpRef}
           ></Form.Control>
           </Col>
           <Col>

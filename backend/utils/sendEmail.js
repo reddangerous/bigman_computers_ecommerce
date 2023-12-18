@@ -1,7 +1,9 @@
+// sendEmail.js
 import nodemailer from 'nodemailer';
 import generateOTP from '../utils/generateOtp.js';
 import dotenv from 'dotenv';
 import asyncHandler from 'express-async-handler';
+import { setOTP } from './otpStore.js';  // Adjust the path accordingly
 dotenv.config();
 
 const sendEmail = asyncHandler(async (email) => {
@@ -13,11 +15,9 @@ const sendEmail = asyncHandler(async (email) => {
     },
   });
 
-  let otpStore = {};
-
   // Generate 6 digit OTP
   const otp = generateOTP();
-  otpStore[email] = otp;
+  setOTP(email, otp);  // Store OTP in otpStore
 
   const mailOptions = {
     from: process.env.EMAIL_USER,

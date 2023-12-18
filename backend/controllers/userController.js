@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler'
 import generateToken from '../utils/generateToken.js'
 import User from '../models/userModel.js'
 import sendEmail from '../utils/sendEmail.js'
+import { getOTP } from '../utils/otpStore.js'
 // @desc    Auth user & get token
 // @route   POST /api/users/login
 // @access  Public
@@ -38,7 +39,7 @@ const sendEmailSend = asyncHandler(async (req, res) => {
 const authEmail = asyncHandler(async (req, res) => {
   const { email, otp } = req.body;
   if (email && otp) {
-    if (otpStore[email] == otp) {
+    if (getOTP(email) == otp) {
       res.status(200).json({ message: 'Email verified' });
     } else {
       res.status(401).json({ message: 'Invalid OTP' });
