@@ -40,7 +40,7 @@ const authEmail = asyncHandler(async (req, res) => {
   const { email, otp } = req.body;
   if (email && otp) {
     if (getOTP(email) == otp) {
-      res.status(200).json({ message: 'Email verified' });
+      res.status(200).json({ message: 'Email OTP verified' });
     } else {
       res.status(401).json({ message: 'Invalid OTP' });
     }

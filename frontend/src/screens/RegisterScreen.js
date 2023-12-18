@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Form, Button, Row, Col } from 'react-bootstrap'
+import { Form, Button, Row, Col, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
@@ -19,11 +19,10 @@ const RegisterScreen = ({ location, history }) => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState(null)
-  const [isSubmitDisabled, setisSubmitDisabled] = useState(true)
   const [retryCountdown, setRetryCountdown] = useState(60);
   const [isButtonclicked, setisButtonclicked] = useState(false)
   const [iscountDown, setiscountDown] = useState(false)
-  const [isSendOtp, setisSendOtp] = useState(true)
+  const [formState, setFormState] = useState("EMAIL-NOT-VERIFIED");
   const dispatch = useDispatch()
   const userRegister = useSelector((state) => state.userRegister)
   const { loading, error, userInfo } = userRegister
@@ -43,7 +42,6 @@ const RegisterScreen = ({ location, history }) => {
     } else {
       dispatch(register(name, email, password))
       dispatch(authEmail(email, otpRef.current.value))
-      setisSubmitDisabled(false)
     }
   }
 const sendOtp = (e) => {
@@ -52,19 +50,24 @@ const sendOtp = (e) => {
     setMessage('Otp sent to your email')
     setisButtonclicked(true)
     setiscountDown(true)
-    setisSendOtp(false)
+    setFormState("OTP")
   }
-const checkOtp = () => {
- const otpCorrect = dispatch(authEmail(email, otpRef.current.value));
-  if (otpCorrect) {
-    setisSubmitDisabled(true)
-    return
+const checkOtp = async (e) => {
+ e.preventDefault()
+ const otp = otpRef.current.value
+
+try{
+ 
+ const response= await dispatch(authEmail(email, otp))
+ if(response.message === "Email OTP verified" && response.status === 200 && response ==="Email OTP verified" ){
+   setFormState("PASSWORDS")
+ }
+ else{
+    setFormState("OTP")
   }
-  setisSubmitDisabled(true)
-  
-  setMessage('Otp is incorrect please retry or resend otp')
-  setisSubmitDisabled(true)
-  
+}catch(error){
+  console.log(error)
+}
 }
 useEffect(() => {
   if (isButtonclicked) {
@@ -74,20 +77,21 @@ useEffect(() => {
   
     return () => {
       clearInterval(interval);
-      setisSendOtp(true); 
     };
   }
 }, [isButtonclicked]);
 
 
   return (
-    <FormContainer>
-      
-      <h1>Sign Up</h1>
+    <div className="d-flex min-vh-100 align-items-center justify-content-center">
+    <Card className="bg-white shadow-lg" style={{width: '80%'}} border={true}>
+      <Card.Body>
+    <FormContainer className = 'd-flex align-items-center justify-content-center'>
+      <h1 className="text-dark mb-3 text-xl font-bold">Sign Up</h1>
       {message && <Message variant='success'>{message}</Message>}
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
-      <Form onSubmit={submitHandler}>
+      <Form onSubmit={submitHandler} >
         <Form.Group controlId='name'>
           <Form.Label>Name</Form.Label>
           <Form.Control
@@ -95,51 +99,102 @@ useEffect(() => {
             placeholder='Enter name'
             value={name}
             onChange={(e) => setName(e.target.value)}
+            style={{
+              color: 'white',
+              outline: '#f0b90b',
+              backgroundColor: '#1e2329',
+              border: '2px solid #f0b90b',
+              borderRadius: '5px',
+              textAlign: 'left',
+              fontSize: '1rem',
+              fontWeight: '900',
+            }}
           ></Form.Control>
         </Form.Group>
 
         <Form.Group controlId='email'>
           <Form.Label>Email Address</Form.Label>
-          <Row>
-            <Col>
               <Form.Control
                 type='email'
                 placeholder='Enter email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                style={{
+                  color: 'white',
+                  outline: '#f0b90b',
+                  backgroundColor: '#1e2329',
+                  border: '2px solid #f0b90b',
+                  borderRadius: '5px',
+                  textAlign: 'left',
+                  fontSize: '1rem',
+                  fontWeight: '900',
+                }}
               />
-            </Col>
-            <Col>
-            {isSendOtp && (
-              <Button onClick={sendOtp}>Send OTP</Button>
-            )}
-            </Col>
-          </Row>
+           
+            {formState === "EMAIL-NOT-VERIFIED" && (
+              <>
+           
+            
+              <Button 
+                  className="shadow mt-3"
+                  style={{
+                    color: 'white',
+                    outline: '#f0b90b',
+                    backgroundColor: '#f0b90b',
+                    borderRadius: '5px',
+                    textAlign: 'center',
+                    fontSize: '1rem',
+                    fontWeight: '900',
+
+                  }}
+                   onClick={sendOtp}>Send OTP</Button>
           {iscountDown && (
             <>
           {retryCountdown > 0 && (
-            <p>{`Didn't receive code? Retry in ${retryCountdown}s`}</p>
+            <p  >{`Didn't receive code? Retry in ${retryCountdown}s`}</p>
           )}
           </>
           )}
+          </>
+            )}
         </Form.Group>
+        {formState === "OTP" && (
+          <>
         <Form.Group controlId='otp'>
-          
           <Form.Label> Otp</Form.Label>
-          <Row>
-            <Col>
           <Form.Control
             type='text'
             placeholder='Enter otp'
             ref={otpRef}
+            style={{
+              color: 'white',
+              outline: '#f0b90b',
+              backgroundColor: '#1e2329',
+              border: '2px solid #f0b90b',
+              borderRadius: '5px',
+              textAlign: 'left',
+              fontSize: '1rem',
+              fontWeight: '900',
+            }}
           ></Form.Control>
-          </Col>
-          <Col>
-          <Button onClick={checkOtp}> verify Otp</Button>
-          </Col>
-          </Row>
+          <Button onClick={checkOtp}
+          className="shadow mt-3"
+          style={{
+            color: 'white',
+            outline: '#f0b90b',
+            backgroundColor: '#f0b90b',
+            borderRadius: '5px',
+            textAlign: 'center',
+            fontSize: '1rem',
+            fontWeight: '900',
+
+          }}
+          > verify Otp</Button>
+        
         </Form.Group>
-        {isSubmitDisabled && (
+        </>
+        )}
+        {formState === "PASSWORDS" && (
           <>
         <Form.Group controlId='password'>
           <Form.Label>Password Address</Form.Label>
@@ -148,6 +203,16 @@ useEffect(() => {
             placeholder='Enter password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            style={{
+              color: 'white',
+              outline: '#f0b90b',
+              backgroundColor: '#1e2329',
+              border: '2px solid #f0b90b',
+              borderRadius: '5px',
+              textAlign: 'left',
+              fontSize: '1rem',
+              fontWeight: '900',
+            }}
           ></Form.Control>
         </Form.Group>
 
@@ -158,10 +223,30 @@ useEffect(() => {
             placeholder='Confirm password'
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
+            style={{
+              color: 'white',
+              outline: '#f0b90b',
+              backgroundColor: '#1e2329',
+              border: '2px solid #f0b90b',
+              borderRadius: '5px',
+              textAlign: 'left',
+              fontSize: '1rem',
+              fontWeight: '900',
+            }}
           ></Form.Control>
         </Form.Group>
 
-        <Button type='submit' variant='primary'>
+        <Button type='submit'  className="shadow mt-3"
+          style={{
+            color: 'white',
+            outline: '#f0b90b',
+            backgroundColor: '#f0b90b',
+            borderRadius: '5px',
+            textAlign: 'center',
+            fontSize: '1rem',
+            fontWeight: '900',
+
+          }}>
           Register
         </Button>
         </>
@@ -176,8 +261,10 @@ useEffect(() => {
           </Link>
         </Col>
       </Row>
-     
     </FormContainer>
+    </Card.Body>
+    </Card>
+  </div>
   )
 }
 
