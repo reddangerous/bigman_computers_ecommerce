@@ -31,6 +31,7 @@ const RegisterScreen = ({ location, history }) => {
 
   useEffect(() => {
     if (userInfo) {
+      console.log(userInfo)
       history.push(redirect)
     }
   }, [history, userInfo, redirect])
@@ -41,12 +42,12 @@ const RegisterScreen = ({ location, history }) => {
       setMessage('Passwords do not match')
     } else {
       dispatch(register(name, email, password))
-      dispatch(authEmail(email, otpRef.current.value))
+     
     }
   }
-const sendOtp = (e) => {
+const sendOtp = async (e) => {
     e.preventDefault()
-    dispatch(sendEmailSend(email))
+  dispatch(sendEmailSend(email))
     setMessage('Otp sent to your email')
     setisButtonclicked(true)
     setiscountDown(true)
@@ -57,16 +58,11 @@ const checkOtp = async (e) => {
  const otp = otpRef.current.value
 
 try{
- 
- const response= await dispatch(authEmail(email, otp))
- if(response.message === "Email OTP verified" && response.status === 200 && response ==="Email OTP verified" ){
-   setFormState("PASSWORDS")
- }
- else{
-    setFormState("OTP")
-  }
+  dispatch(authEmail(email, otp))
+  setFormState("PASSWORDS")
 }catch(error){
   console.log(error)
+  setFormState("OTP")
 }
 }
 useEffect(() => {

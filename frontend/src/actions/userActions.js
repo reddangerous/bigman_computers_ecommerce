@@ -25,7 +25,9 @@ import {
   USER_UPDATE_SUCCESS,
   USER_UPDATE_REQUEST,
   EMAIL_AUTH_SUCCESS,
-  OTP_EMAIL_SUCCESS
+  OTP_EMAIL_SUCCESS,
+  OTP_EMAIL_FAIL,
+  
 } from '../constants/userConstants'
 import { ORDER_LIST_MY_RESET } from '../constants/orderConstants'
 
@@ -95,7 +97,7 @@ export const sendEmailSend = (email) => async (dispatch) => {
   }
     catch (error){
       dispatch({
-        type: USER_REGISTER_FAIL,
+        type: OTP_EMAIL_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message
@@ -105,6 +107,9 @@ export const sendEmailSend = (email) => async (dispatch) => {
   }
  export const authEmail = (email, otp) => async (dispatch) => {
   try{
+    dispatch({
+      type: USER_REGISTER_REQUEST,
+    })
     dispatch({
       type: EMAIL_AUTH_SUCCESS,
     })
@@ -121,6 +126,7 @@ export const sendEmailSend = (email) => async (dispatch) => {
     dispatch({
       type: OTP_EMAIL_SUCCESS,
       payload: mail,
+      response:true
     })
   }catch(error){
     dispatch({

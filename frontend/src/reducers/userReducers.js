@@ -24,6 +24,11 @@ import {
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
   USER_UPDATE_FAIL,
+  EMAIL_AUTH_SUCCESS,
+  OTP_EMAIL_SUCCESS,
+  EMAIL_AUTH_FAIL,
+  OTP_EMAIL_FAIL
+
 } from '../constants/userConstants'
 
 export const userLoginReducer = (state = {}, action) => {
@@ -40,6 +45,36 @@ export const userLoginReducer = (state = {}, action) => {
       return state
   }
 }
+
+export const emailAuthReducer = (state = {}, action) => {
+  switch(action.type){
+    case USER_REGISTER_REQUEST:
+      return { loading: true }
+    case EMAIL_AUTH_SUCCESS:
+      return { loading: false, otpInfo: action.payload }
+    case OTP_EMAIL_SUCCESS:
+      return { loading: false, otpInfo: action.payload }
+    case EMAIL_AUTH_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+
+  }
+}
+export const sendEmailReducer = (state = {}, action) => {
+  switch(action.type){
+    case USER_REGISTER_REQUEST:
+      return { loading: true }
+    case OTP_EMAIL_SUCCESS:
+      return { loading: false, authInfo: action.payload }
+    case OTP_EMAIL_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+
+  }
+}
+
 
 export const userRegisterReducer = (state = {}, action) => {
   switch (action.type) {
