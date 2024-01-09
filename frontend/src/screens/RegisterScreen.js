@@ -47,19 +47,29 @@ const RegisterScreen = ({ location, history }) => {
   }
 const sendOtp = async (e) => {
     e.preventDefault()
+    if (email === '') {
+      setMessage('Please enter email')
+      setFormState("EMAIL-NOT-VERIFIED")
+      return
+    }
+    else{
   dispatch(sendEmailSend(email))
     setMessage('Otp sent to your email')
     setisButtonclicked(true)
     setiscountDown(true)
     setFormState("OTP")
   }
+}
 const checkOtp = async (e) => {
  e.preventDefault()
  const otp = otpRef.current.value
 
 try{
-  dispatch(authEmail(email, otp))
-  setFormState("PASSWORDS")
+    const res = await dispatch(authEmail(email, otp))
+    console.log(res)
+    setFormState("PASSWORDS")
+
+
 }catch(error){
   console.log(error)
   setFormState("OTP")
@@ -83,7 +93,7 @@ useEffect(() => {
     <Card className="bg-white shadow-lg" style={{width: '80%'}} border={true}>
       <Card.Body>
     <FormContainer className = 'd-flex align-items-center justify-content-center'>
-      <h1 className="text-dark mb-3 text-xl font-bold">Sign Up</h1>
+      <h1 className="text-black-700 text-center mb-3 text-xl font-bold">Sign Up</h1>
       {message && <Message variant='success'>{message}</Message>}
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
@@ -252,7 +262,7 @@ useEffect(() => {
       <Row className='py-3'>
         <Col>
           Have an Account?{' '}
-          <Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>
+          <Link to={redirect ? `/login?redirect=${redirect}` : '/login'} style= {{color: '#f0b90b'}}>
             Login
           </Link>
         </Col>

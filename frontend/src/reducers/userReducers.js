@@ -41,16 +41,7 @@ export const userLoginReducer = (state = {}, action) => {
       return { loading: false, error: action.payload }
     case USER_LOGOUT:
       return {}
-    default:
-      return state
-  }
-}
-
-export const emailAuthReducer = (state = {}, action) => {
-  switch(action.type){
-    case USER_REGISTER_REQUEST:
-      return { loading: true }
-    case EMAIL_AUTH_SUCCESS:
+      case EMAIL_AUTH_SUCCESS:
       return { loading: false, otpInfo: action.payload }
     case OTP_EMAIL_SUCCESS:
       return { loading: false, otpInfo: action.payload }
@@ -58,9 +49,10 @@ export const emailAuthReducer = (state = {}, action) => {
       return { loading: false, error: action.payload }
     default:
       return state
-
   }
 }
+
+
 export const sendEmailReducer = (state = {}, action) => {
   switch(action.type){
     case USER_REGISTER_REQUEST:
