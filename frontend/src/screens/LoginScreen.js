@@ -31,7 +31,7 @@ const LoginScreen = ({ location, history }) => {
 
   return (
     <FormContainer>
-      <h1>Sign In</h1>
+      <h1 className='text-center text-dark '>Sign In</h1>
       {error && <Message variant='danger'>{error}</Message>}
       {loading && <Loader />}
       <Form onSubmit={submitHandler}>
@@ -42,6 +42,16 @@ const LoginScreen = ({ location, history }) => {
             placeholder='Enter email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            style={{
+              color: 'white',
+              outline: '#f0b90b',
+              backgroundColor: '#1e2329',
+              border: '2px solid #f0b90b',
+              borderRadius: '5px',
+              textAlign: 'left',
+              fontSize: '1rem',
+              fontWeight: '900',
+            }}
           ></Form.Control>
         </Form.Group>
 
@@ -52,10 +62,31 @@ const LoginScreen = ({ location, history }) => {
             placeholder='Enter password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            style={{
+              color: 'white',
+              outline: '#f0b90b',
+              backgroundColor: '#1e2329',
+              border: '2px solid #f0b90b',
+              borderRadius: '5px',
+              textAlign: 'left',
+              fontSize: '1rem',
+              fontWeight: '900',
+            }}
           ></Form.Control>
         </Form.Group>
 
-        <Button type='submit' variant='primary'>
+        <Button type='submit' variant='primary'
+        style={{
+          color: 'white',
+          outline: '#f0b90b',
+          backgroundColor: '#f0b90b',
+          borderRadius: '5px',
+          textAlign: 'center',
+          fontSize: '1rem',
+          fontWeight: '900',
+
+        }}
+        >
           Sign In
         </Button>
       </Form>
@@ -63,7 +94,7 @@ const LoginScreen = ({ location, history }) => {
       <Row className='py-3'>
         <Col>
           New Customer?{' '}
-          <Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>
+          <Link to={redirect ? `/register?redirect=${redirect}` : '/register'} style = {{color:'#f0b90b'}}>
             Register
           </Link>
         </Col>
