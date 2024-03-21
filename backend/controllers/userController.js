@@ -115,6 +115,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   if (user) {
     user.name = req.body.name || user.name
     user.email = req.body.email || user.email
+    user.phoneNumber = req.body.phoneNumber || user.phoneNumber
     if (req.body.password) {
       user.password = req.body.password
     }
@@ -126,6 +127,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
+      phoneNumber: updatedUser.phoneNumber,
       token: generateToken(updatedUser._id),
     })
   } else {
@@ -181,6 +183,7 @@ const updateUser = asyncHandler(async (req, res) => {
     user.name = req.body.name || user.name
     user.email = req.body.email || user.email
     user.isAdmin = req.body.isAdmin
+    user.phoneNumber = req.body.phoneNumber
 
     const updatedUser = await user.save()
 
@@ -189,6 +192,7 @@ const updateUser = asyncHandler(async (req, res) => {
       name: updatedUser.name,
       email: updatedUser.email,
       isAdmin: updatedUser.isAdmin,
+      phoneNumber: updatedUser.phoneNumber
     })
   } else {
     res.status(404)

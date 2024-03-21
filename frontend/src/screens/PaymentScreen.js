@@ -42,8 +42,8 @@ const PaymentScreen = ({ history }) => {
             ></Form.Check>
             <Form.Check
               type='radio'
-              label='Stripe'
-              id='Stripe'
+              label='Mpesa'
+              id='Mpesa'
               name='paymentMethod'
               value='Mpesa'
               onChange={(e) => setPaymentMethod(e.target.value)}

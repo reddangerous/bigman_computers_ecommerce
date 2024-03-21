@@ -6,6 +6,9 @@ import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import { processPayment } from '../actions/patmentActions';
+
+import { getUserDetails } from '../actions/userActions'
 import {
   getOrderDetails,
   payOrder,
@@ -22,7 +25,10 @@ const OrderScreen = ({ match, history }) => {
   const [sdkReady, setSdkReady] = useState(false)
 
   const dispatch = useDispatch()
+  
 
+
+ 
   const orderDetails = useSelector((state) => state.orderDetails)
   const { order, loading, error } = orderDetails
 
@@ -34,6 +40,13 @@ const OrderScreen = ({ match, history }) => {
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+ 
+  
+  const userDetails = useSelector((state) => state.userDetails)
+  const {  user } = userDetails
+  console.log(user)
+  const phoneNumber = user.phoneNumber
+  console.log(phoneNumber)
 
   if (!loading) {
     //   Calculate prices
@@ -49,6 +62,11 @@ const OrderScreen = ({ match, history }) => {
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
+    }
+    else{
+      if(!user?.name){
+        dispatch(getUserDetails(userInfo._id))
+      }
     }
 
     const addPayPalScript = async () => {
@@ -80,6 +98,23 @@ const OrderScreen = ({ match, history }) => {
     console.log(paymentResult)
     dispatch(payOrder(orderId, paymentResult))
   }
+
+  const payMpesa = async () => {
+    const numberTotalPrice = parseInt(order.totalPrice);
+    const roundedTotalPrice = Math.round(numberTotalPrice);
+   
+    // Create an object with phoneNumber and amount
+    const paymentDetails = {
+       phoneNumber: phoneNumber,
+       amount: roundedTotalPrice
+    };
+   
+    // Dispatch the processPayment action with the paymentDetails object
+   await  dispatch(processPayment(paymentDetails));
+   
+    console.log(paymentDetails);
+   }
+   
 
   const deliverHandler = () => {
     dispatch(deliverOrder(order))
@@ -172,42 +207,54 @@ const OrderScreen = ({ match, history }) => {
                 <h2>Order Summary</h2>
               </ListGroup.Item>
               <ListGroup.Item>
-                <Row>
-                  <Col>Items</Col>
-                  <Col>${order.itemsPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Shipping</Col>
-                  <Col>${order.shippingPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Tax</Col>
-                  <Col>${order.taxPrice}</Col>
-                </Row>
-              </ListGroup.Item>
-              <ListGroup.Item>
-                <Row>
-                  <Col>Total</Col>
-                  <Col>${order.totalPrice}</Col>
-                </Row>
-              </ListGroup.Item>
+                    <Row>
+                      <Col>Items</Col>
+                      <Col>{order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.itemsPrice}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Shipping</Col>
+                      <Col>{order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.shippingPrice}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Tax</Col>
+                      <Col>{order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.taxPrice}</Col>
+                    </Row>
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <Row>
+                      <Col>Total</Col>
+                      <Col>{order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.totalPrice}</Col>
+                    </Row>
+                  </ListGroup.Item>
+
               {!order.isPaid && (
-                <ListGroup.Item>
-                  {loadingPay && <Loader />}
-                  {!sdkReady ? (
-                    <Loader />
-                  ) : (
-                    <PayPalButton
-                      amount={order.totalPrice}
-                      onSuccess={successPaymentHandler}
-                    />
+                  <>
+                      {loadingPay && <Loader />}
+                      {!sdkReady ? (
+                        <Loader />
+                      ) : (
+                        <PayPalButton
+                          amount={order.totalPrice}
+                          onSuccess={successPaymentHandler}
+                        />
+                      )}
+                      {order.paymentMethod === 'Mpesa' && (
+                        <Button
+                          variant="primary"
+                          className="btn btn-block"
+                          onClick={payMpesa}
+                          disabled={loading}
+                        >
+                           {loading ? 'Processing...' : 'Pay with Mpesa'}
+                        </Button>
+                      )}
+                  </>
                   )}
-                </ListGroup.Item>
-              )}
+
               {loadingDeliver && <Loader />}
               {userInfo &&
                 userInfo.isAdmin &&

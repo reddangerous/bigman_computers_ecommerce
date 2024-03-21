@@ -9,6 +9,7 @@ import {
 } from "../utils/mpesaUtil.js";
 import moment from "moment";
 
+
 export const makeStkPushRequest = expressAsyncHandler(async (req, res) => {
   try {
     // Get the access token first
@@ -32,8 +33,8 @@ export const makeStkPushRequest = expressAsyncHandler(async (req, res) => {
         PartyB: process.env.SHORT_CODE,
         PhoneNumber: phoneNumber,
         CallBackURL: `${process.env.APP_DOMAIN}/mpesa/stk-push/callback`,
-        AccountReference: "Test",
-        TransactionDesc: "Test",
+        AccountReference: "BigManComputers Payment",
+        TransactionDesc: "BigManComputers Payment",
       },
       {
         headers: {
@@ -78,6 +79,7 @@ export const stkCallBackUrl = expressAsyncHandler(async (req, res) => {
     console.log("Transaction Date", TransactionDate);
     console.log("Mpesa Receipt", MpesaReceiptNumber);
     // Transaction table update
+  
   } catch (error) {
     console.log(`Error in Callback Function :${error}`);
   }
