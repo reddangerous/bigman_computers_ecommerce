@@ -37,7 +37,7 @@ const PlaceOrderScreen = ({ history }) => {
   const cart = useSelector((state) => state.cart)
   console.log(cart)
   const [showModal, setShowModal] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState("");
   
   //   Calculate prices
   const addDecimals = (num) => {
@@ -222,7 +222,12 @@ const PlaceOrderScreen = ({ history }) => {
           type="text"
           placeholder="Enter phone number"
           value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
+          onChange={(e) => {
+            const newPhoneNumber = e.target.value;
+            setPhoneNumber(newPhoneNumber);
+            // Set the phone number in local storage
+            localStorage.setItem('phoneNumber', newPhoneNumber);
+         }}
         />
       </Form.Group>
     </Form>

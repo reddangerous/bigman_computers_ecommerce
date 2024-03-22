@@ -7,6 +7,7 @@ import {
   paymentVerification,
   reduceMpesaMetadata,
 } from "../utils/mpesaUtil.js";
+import Order from '../models/orderModel.js'
 import moment from "moment";
 
 
@@ -52,9 +53,34 @@ export const makeStkPushRequest = expressAsyncHandler(async (req, res) => {
         message: "There was an error completing your payment request",
       });
       // DB LOGIC
+      console.log("error verifying payment")
     }
     if (paymentVerificationResponse.success) {
+
       // DB Logic
+
+      const orderId =req.params.id
+  const order = await Order.findById(orderId)
+  console.log(order)
+
+  if (order) {
+    order.isPaid = true
+    order.paidAt = Date.now()
+    order.paymentResult = {
+      id: req.body.id,
+      status: req.body.status,
+      update_time: req.body.update_time,
+      email_address: req.body.payer.email_address,
+    }
+
+    const updatedOrder = await order.save()
+
+    res.json(updatedOrder)
+    console.log(updatedOrder)
+  } else {
+    res.status(404)
+    throw new Error('Order not found')
+  }
     }
     res.status(200).json({ mpesaResponse: paymentVerificationResponse });
   } catch (error) {

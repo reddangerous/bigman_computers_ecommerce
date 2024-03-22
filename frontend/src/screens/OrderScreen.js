@@ -22,6 +22,7 @@ import {
 const OrderScreen = ({ match, history }) => {
   const orderId = match.params.id
 
+
   const [sdkReady, setSdkReady] = useState(false)
 
   const dispatch = useDispatch()
@@ -45,7 +46,8 @@ const OrderScreen = ({ match, history }) => {
   const userDetails = useSelector((state) => state.userDetails)
   const {  user } = userDetails
   console.log(user)
-  const phoneNumber = user.phoneNumber
+  const phoneNumber = localStorage.getItem('phoneNumber');
+  const processedPhoneNumber = `254${phoneNumber.slice(1)}`;
   console.log(phoneNumber)
 
   if (!loading) {
@@ -62,6 +64,10 @@ const OrderScreen = ({ match, history }) => {
   useEffect(() => {
     if (!userInfo) {
       history.push('/login')
+    }
+    else if(!orderId){
+      orderId = order._id
+      console.log(orderId)
     }
     else{
       if(!user?.name){
@@ -102,17 +108,14 @@ const OrderScreen = ({ match, history }) => {
   const payMpesa = async () => {
     const numberTotalPrice = parseInt(order.totalPrice);
     const roundedTotalPrice = Math.round(numberTotalPrice);
-   
     // Create an object with phoneNumber and amount
-    const paymentDetails = {
-       phoneNumber: phoneNumber,
-       amount: roundedTotalPrice
-    };
+    const orderId = match.params.id
+    console.log(orderId)
    
     // Dispatch the processPayment action with the paymentDetails object
-   await  dispatch(processPayment(paymentDetails));
+    await dispatch(processPayment({phoneNumber: processedPhoneNumber,orderId, amount:1 }));
+
    
-    console.log(paymentDetails);
    }
    
 
@@ -190,7 +193,7 @@ const OrderScreen = ({ match, history }) => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                        {item.qty} x {order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.paymentMethod === 'Mpesa' ? item.price : (item.price / 100)} = {order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.paymentMethod === 'Mpesa' ? (item.qty * item.price) : (item.qty * (item.price / 100))}
                         </Col>
                       </Row>
                     </ListGroup.Item>
