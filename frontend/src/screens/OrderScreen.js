@@ -26,6 +26,8 @@ const OrderScreen = ({ match, history }) => {
   const [sdkReady, setSdkReady] = useState(false)
 
   const dispatch = useDispatch()
+  const [isloading, setisLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
   
 
 
@@ -87,7 +89,7 @@ const OrderScreen = ({ match, history }) => {
       document.body.appendChild(script)
     }
 
-    if (!order || successPay || successDeliver) {
+    if (!order || successPay || successDeliver || success) {
       dispatch({ type: ORDER_PAY_RESET })
       dispatch({ type: ORDER_DELIVER_RESET })
       dispatch(getOrderDetails(orderId))
@@ -98,7 +100,7 @@ const OrderScreen = ({ match, history }) => {
         setSdkReady(true)
       }
     }
-  }, [dispatch, orderId, successPay, successDeliver, order])
+  }, [dispatch, orderId, successPay, successDeliver, order, success])
 
   const successPaymentHandler = (paymentResult) => {
     console.log(paymentResult)
@@ -106,17 +108,26 @@ const OrderScreen = ({ match, history }) => {
   }
 
   const payMpesa = async () => {
+    setisLoading(true); 
     const numberTotalPrice = parseInt(order.totalPrice);
     const roundedTotalPrice = Math.round(numberTotalPrice);
     // Create an object with phoneNumber and amount
     const orderId = match.params.id
     console.log(orderId)
-   
-    // Dispatch the processPayment action with the paymentDetails object
-    await dispatch(processPayment({phoneNumber: processedPhoneNumber,orderId, amount:1 }));
-
+   try {
+    
+     // Dispatch the processPayment action with the paymentDetails object
+     await dispatch(processPayment({phoneNumber: processedPhoneNumber,orderId, amount:1 }));
+   } catch (error) {
+    console.error('Payment failed:', error);
+   }
+   finally{
+    setisLoading(false);
+    dispatch(getOrderDetails(orderId))
+   }
    
    }
+
    
 
   const deliverHandler = () => {
@@ -245,16 +256,19 @@ const OrderScreen = ({ match, history }) => {
                           onSuccess={successPaymentHandler}
                         />
                       )}
+                       {isloading && <Loader />}
                       {order.paymentMethod === 'Mpesa' && (
+                        
                         <Button
                           variant="primary"
                           className="btn btn-block"
                           onClick={payMpesa}
                           disabled={loading}
                         >
-                           {loading ? 'Processing...' : 'Pay with Mpesa'}
+                           {isloading ? 'Processing...' : 'Pay with Mpesa'}
                         </Button>
                       )}
+                      
                   </>
                   )}
 

@@ -14,7 +14,7 @@ import moment from "moment";
 export const makeStkPushRequest = expressAsyncHandler(async (req, res) => {
   try {
     // Get the access token first
-    const { phoneNumber, amount } = req.body;
+    const { phoneNumber, amount, orderId } = req.body;
     const timestamp = moment().format("YYYYMMDDHHmmss");
     const password = getMpesaPassword(
       process.env.SHORT_CODE,
@@ -58,8 +58,6 @@ export const makeStkPushRequest = expressAsyncHandler(async (req, res) => {
     if (paymentVerificationResponse.success) {
 
       // DB Logic
-
-      const orderId =req.params.id
   const order = await Order.findById(orderId)
   console.log(order)
 
@@ -70,7 +68,7 @@ export const makeStkPushRequest = expressAsyncHandler(async (req, res) => {
       id: req.body.id,
       status: req.body.status,
       update_time: req.body.update_time,
-      email_address: req.body.payer.email_address,
+      //email_address: req.body.payer.email_address,
     }
 
     const updatedOrder = await order.save()
