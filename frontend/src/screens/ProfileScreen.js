@@ -67,6 +67,16 @@ const ProfileScreen = ({ location, history }) => {
               placeholder='Enter name'
               value={name}
               onChange={(e) => setName(e.target.value)}
+              style={{
+                color: 'white',
+                outline: '#f0b90b',
+                backgroundColor: '#1e2329',
+                border: '2px solid #f0b90b',
+                borderRadius: '5px',
+                textAlign: 'left',
+                fontSize: '1rem',
+                fontWeight: '900',
+              }}
             ></Form.Control>
           </Form.Group>
 
@@ -77,6 +87,16 @@ const ProfileScreen = ({ location, history }) => {
               placeholder='Enter email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              style={{
+                color: 'white',
+                outline: '#f0b90b',
+                backgroundColor: '#1e2329',
+                border: '2px solid #f0b90b',
+                borderRadius: '5px',
+                textAlign: 'left',
+                fontSize: '1rem',
+                fontWeight: '900',
+              }}
             ></Form.Control>
           </Form.Group>
 
@@ -87,6 +107,16 @@ const ProfileScreen = ({ location, history }) => {
               placeholder='Enter password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              style={{
+                color: 'white',
+                outline: '#f0b90b',
+                backgroundColor: '#1e2329',
+                border: '2px solid #f0b90b',
+                borderRadius: '5px',
+                textAlign: 'left',
+                fontSize: '1rem',
+                fontWeight: '900',
+              }}
             ></Form.Control>
           </Form.Group>
 
@@ -97,10 +127,29 @@ const ProfileScreen = ({ location, history }) => {
               placeholder='Confirm password'
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              style={{
+                color: 'white',
+                outline: '#f0b90b',
+                backgroundColor: '#1e2329',
+                border: '2px solid #f0b90b',
+                borderRadius: '5px',
+                textAlign: 'left',
+                fontSize: '1rem',
+                fontWeight: '900',
+              }}
             ></Form.Control>
           </Form.Group>
 
-          <Button type='submit' variant='primary'>
+          <Button type='submit' style={{
+            color: 'white',
+            outline: '#f0b90b',
+            backgroundColor: '#f0b90b',
+            borderRadius: '5px',
+            textAlign: 'center',
+            fontSize: '1rem',
+            fontWeight: '900',
+
+          }}>
             Update
           </Button>
         </Form>
@@ -145,7 +194,16 @@ const ProfileScreen = ({ location, history }) => {
                   </td>
                   <td>
                     <LinkContainer to={`/order/${order._id}`}>
-                      <Button className='btn-sm' variant='light'>
+                      <Button className='btn-sm' style={{
+            color: 'white',
+            outline: '#f0b90b',
+            backgroundColor: '#f0b90b',
+            borderRadius: '5px',
+            textAlign: 'center',
+            fontSize: '1rem',
+            fontWeight: '900',
+
+          }}>
                         Details
                       </Button>
                     </LinkContainer>

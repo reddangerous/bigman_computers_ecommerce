@@ -183,7 +183,16 @@ const ProductEditScreen = ({ match, history }) => {
               ></Form.Control>
             </Form.Group>
 
-            <Button type='submit' variant='primary'>
+            <Button type='submit'  style={{
+              color: 'white',
+              outline: '#f0b90b',
+              backgroundColor: '#1e2329',
+              border: '2px solid #f0b90b',
+              borderRadius: '5px',
+              textAlign: 'left',
+              fontSize: '1rem',
+              fontWeight: '900',
+            }}>
               Update
             </Button>
           </Form>

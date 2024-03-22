@@ -138,6 +138,16 @@ const ProductScreen = ({ history, match }) => {
                       className='btn-block'
                       type='button'
                       disabled={product.countInStock === 0}
+                      style={{
+                        color: 'white',
+                        outline: '#f0b90b',
+                        backgroundColor: '#1e2329',
+                        border: '2px solid #f0b90b',
+                        borderRadius: '5px',
+                        textAlign: 'left',
+                        fontSize: '1rem',
+                        fontWeight: '900',
+                      }}
                     >
                       Add To Cart
                     </Button>
@@ -190,7 +200,16 @@ const ProductScreen = ({ history, match }) => {
                           onChange={(e) => setComment(e.target.value)}
                         ></Form.Control>
                       </Form.Group>
-                      <Button type='submit' variant='primary'>
+                      <Button type='submit'  style={{
+              color: 'white',
+              outline: '#f0b90b',
+              backgroundColor: '#1e2329',
+              border: '2px solid #f0b90b',
+              borderRadius: '5px',
+              textAlign: 'left',
+              fontSize: '1rem',
+              fontWeight: '900',
+            }}>
                         Submit
                       </Button>
                     </Form>

@@ -201,6 +201,16 @@ const PlaceOrderScreen = ({ history }) => {
       className='btn-block'
       disabled={cart.cartItems === 0}
       onClick={placeOrderHandler}
+      style={{
+        color: 'white',
+        outline: '#f0b90b',
+        backgroundColor: '#f0b90b',
+        borderRadius: '5px',
+        textAlign: 'center',
+        fontSize: '1rem',
+        fontWeight: '900',
+
+      }}
     >
       Place Order
     </Button>
@@ -222,21 +232,43 @@ const PlaceOrderScreen = ({ history }) => {
           type="text"
           placeholder="Enter phone number"
           value={phoneNumber}
+          style={{
+            color: 'white',
+            outline: '#f0b90b',
+            backgroundColor: '#1e2329',
+            border: '2px solid #f0b90b',
+            borderRadius: '5px',
+            textAlign: 'left',
+            fontSize: '1rem',
+            fontWeight: '900',
+          }}
           onChange={(e) => {
             const newPhoneNumber = e.target.value;
             setPhoneNumber(newPhoneNumber);
             // Set the phone number in local storage
             localStorage.setItem('phoneNumber', newPhoneNumber);
+            
          }}
         />
       </Form.Group>
     </Form>
  </Modal.Body>
  <Modal.Footer>
-    <Button variant="secondary" onClick={() => setShowModal(false)}>
+    <Button variant="primary" onClick={() => setShowModal(false)}>
       Close
     </Button>
-    <Button variant="primary" onClick={handleSubmit}>
+    <Button  onClick={handleSubmit}
+    style={{
+      color: 'white',
+      outline: '#f0b90b',
+      backgroundColor: '#f0b90b',
+      borderRadius: '5px',
+      textAlign: 'center',
+      fontSize: '1rem',
+      fontWeight: '900',
+
+    }}
+    >
       Save Changes
     </Button>
  </Modal.Footer>

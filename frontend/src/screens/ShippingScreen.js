@@ -35,6 +35,16 @@ const ShippingScreen = ({ history }) => {
             value={address}
             required
             onChange={(e) => setAddress(e.target.value)}
+            style={{
+              color: 'white',
+              outline: '#f0b90b',
+              backgroundColor: '#1e2329',
+              border: '2px solid #f0b90b',
+              borderRadius: '5px',
+              textAlign: 'left',
+              fontSize: '1rem',
+              fontWeight: '900',
+            }}
           ></Form.Control>
         </Form.Group>
 
@@ -46,6 +56,16 @@ const ShippingScreen = ({ history }) => {
             value={city}
             required
             onChange={(e) => setCity(e.target.value)}
+            style={{
+              color: 'white',
+              outline: '#f0b90b',
+              backgroundColor: '#1e2329',
+              border: '2px solid #f0b90b',
+              borderRadius: '5px',
+              textAlign: 'left',
+              fontSize: '1rem',
+              fontWeight: '900',
+            }}
           ></Form.Control>
         </Form.Group>
 
@@ -57,6 +77,16 @@ const ShippingScreen = ({ history }) => {
             value={postalCode}
             required
             onChange={(e) => setPostalCode(e.target.value)}
+            style={{
+              color: 'white',
+              outline: '#f0b90b',
+              backgroundColor: '#1e2329',
+              border: '2px solid #f0b90b',
+              borderRadius: '5px',
+              textAlign: 'left',
+              fontSize: '1rem',
+              fontWeight: '900',
+            }}
           ></Form.Control>
         </Form.Group>
 
@@ -68,10 +98,29 @@ const ShippingScreen = ({ history }) => {
             value={country}
             required
             onChange={(e) => setCountry(e.target.value)}
+            style={{
+              color: 'white',
+              outline: '#f0b90b',
+              backgroundColor: '#1e2329',
+              border: '2px solid #f0b90b',
+              borderRadius: '5px',
+              textAlign: 'left',
+              fontSize: '1rem',
+              fontWeight: '900',
+            }}
           ></Form.Control>
         </Form.Group>
 
-        <Button type='submit' variant='primary'>
+        <Button type='submit' style={{
+            color: 'white',
+            outline: '#f0b90b',
+            backgroundColor: '#f0b90b',
+            borderRadius: '5px',
+            textAlign: 'center',
+            fontSize: '1rem',
+            fontWeight: '900',
+
+          }}>
           Continue
         </Button>
       </Form>

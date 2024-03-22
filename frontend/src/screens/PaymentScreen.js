@@ -30,7 +30,15 @@ const PaymentScreen = ({ history }) => {
       <Form onSubmit={submitHandler}>
         <Form.Group>
           <Form.Label as='legend'>Select Method</Form.Label>
-          <Col>
+          <Col  style={{
+                color: 'white',
+                backgroundColor: '#1e2329',
+                border: '2px solid #f0b90b',
+                borderRadius: '5px',
+                textAlign: 'left',
+                fontSize: '1rem',
+                fontWeight: '900',
+              }}>
             <Form.Check
               type='radio'
               label='PayPal or Credit Card'
@@ -39,6 +47,7 @@ const PaymentScreen = ({ history }) => {
               value='PayPal'
               checked
               onChange={(e) => setPaymentMethod(e.target.value)}
+             
             ></Form.Check>
             <Form.Check
               type='radio'
@@ -51,7 +60,16 @@ const PaymentScreen = ({ history }) => {
           </Col>
         </Form.Group>
 
-        <Button type='submit' variant='primary'>
+        <Button type='submit' style={{
+            color: 'white',
+            outline: '#f0b90b',
+            backgroundColor: '#f0b90b',
+            borderRadius: '5px',
+            textAlign: 'center',
+            fontSize: '1rem',
+            fontWeight: '900',
+
+          }}>
           Continue
         </Button>
       </Form>
