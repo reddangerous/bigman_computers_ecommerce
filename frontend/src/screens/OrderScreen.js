@@ -117,7 +117,7 @@ const OrderScreen = ({ match, history }) => {
    try {
     
      // Dispatch the processPayment action with the paymentDetails object
-     await dispatch(processPayment({phoneNumber: processedPhoneNumber,orderId, amount:1 }));
+     await dispatch(processPayment({phoneNumber: processedPhoneNumber,orderId, amount:roundedTotalPrice }));
    } catch (error) {
     console.error('Payment failed:', error);
    }
@@ -221,29 +221,30 @@ const OrderScreen = ({ match, history }) => {
                 <h2>Order Summary</h2>
               </ListGroup.Item>
               <ListGroup.Item>
-                    <Row>
-                      <Col>Items</Col>
-                      <Col>{order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.itemsPrice}</Col>
-                    </Row>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Shipping</Col>
-                      <Col>{order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.shippingPrice}</Col>
-                    </Row>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Tax</Col>
-                      <Col>{order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.taxPrice}</Col>
-                    </Row>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Total</Col>
-                      <Col>{order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.totalPrice}</Col>
-                    </Row>
-                  </ListGroup.Item>
+  <Row>
+    <Col>Items</Col>
+    <Col>{order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.paymentMethod === 'Mpesa' ? order.itemsPrice : (order.itemsPrice / 100)}</Col>
+  </Row>
+</ListGroup.Item>
+<ListGroup.Item>
+  <Row>
+    <Col>Shipping</Col>
+    <Col>{order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.paymentMethod === 'Mpesa' ? order.shippingPrice : (order.shippingPrice / 100)}</Col>
+  </Row>
+</ListGroup.Item>
+<ListGroup.Item>
+  <Row>
+    <Col>Tax</Col>
+    <Col>{order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.paymentMethod === 'Mpesa' ? order.taxPrice : (order.taxPrice / 100)}</Col>
+  </Row>
+</ListGroup.Item>
+<ListGroup.Item>
+  <Row>
+    <Col>Total</Col>
+    <Col>{order.paymentMethod === 'Mpesa' ? 'Ksh' : '$'}{order.paymentMethod === 'Mpesa' ? order.totalPrice : (order.totalPrice / 100)}</Col>
+  </Row>
+</ListGroup.Item>
+
 
               {!order.isPaid && (
                   <>

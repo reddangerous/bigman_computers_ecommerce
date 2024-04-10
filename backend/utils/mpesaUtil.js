@@ -15,7 +15,7 @@ export function getMpesaPassword(shortCode, passKey, timestamp) {
 }
 
 export const reduceMpesaMetadata = (metadata) =>
-  metadata?.reduce((result, entry) => {
+  metadata.reduce((result, entry) => {
     const { Name, Value } = entry;
     result[Name] = Value;
     return result;
