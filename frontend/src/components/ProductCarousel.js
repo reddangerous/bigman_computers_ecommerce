@@ -9,7 +9,7 @@ import { listTopProducts } from '../actions/productActions'
 const ProductCarousel = () => {
   const dispatch = useDispatch()
 
-  const productTopRated = useSelector((state) => state.productTopRated)
+  const productTopRated = useSelector(state => state.productTopRated)
   const { loading, error, products } = productTopRated
 
   useEffect(() => {
@@ -21,13 +21,29 @@ const ProductCarousel = () => {
   ) : error ? (
     <Message variant='danger'>{error}</Message>
   ) : (
-    <Carousel pause='hover' className='bg-dark mt-5'>
-      {products.map((product) => (
-        <Carousel.Item key={product._id}>
+    <Carousel
+      pause='hover'
+      className='mt-5'
+      style={{ backgroundColor: 'white' }}
+      nextIcon={
+        <span
+          className='carousel-control-next-icon'
+          style={{ backgroundColor: 'pink' }}
+        />
+      }
+      prevIcon={
+        <span
+          className='carousel-control-prev-icon'
+          style={{ backgroundColor: 'pink' }}
+        />
+      }
+    >
+      {products.map(product => (
+        <Carousel.Item key={product._id} style={{ border: '1px solid green' }}>
           <Link to={`/product/${product._id}`}>
             <Image src={product.image} alt={product.name} fluid />
             <Carousel.Caption className='carousel-caption'>
-              <h2>
+              <h2 style={{ color: 'red' }}>
                 {product.name} (Ksh {product.price})
               </h2>
             </Carousel.Caption>

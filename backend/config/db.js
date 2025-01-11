@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 const connectDB = async () => {
   try {
-    const mongourl = process.env.MONGO_URI
+    const mongourl = 'mongodb+srv://reddavie:reddavie@project.0ypulqf.mongodb.net/?retryWrites=true&w=majority&appName=Project'
     //console.log(mongourl)
     const conn = await mongoose.connect(mongourl, {
       useUnifiedTopology: true,

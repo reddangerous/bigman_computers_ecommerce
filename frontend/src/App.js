@@ -19,6 +19,7 @@ import ProductListScreen from './screens/ProductListScreen'
 import ProductEditScreen from './screens/ProductEditScreen'
 import OrderListScreen from './screens/OrderListScreen'
 import Chatbot from './screens/Chatbot'
+import LandingPage from './components/LandingPage'
 const App = () => {
   return (
     <Router>
@@ -59,6 +60,7 @@ const App = () => {
             exact
           />
           <Route path='/' component={HomeScreen} exact />
+          <Route path='/landing' component={LandingPage} />
         </Container>
       </main>
       <Footer />

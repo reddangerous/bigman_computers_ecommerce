@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Form, InputGroup, Button } from 'react-bootstrap';
-import { Search } from 'lucide-react';
+import React, { useState } from 'react'
+import { Form, InputGroup, Button } from 'react-bootstrap'
+import { Search } from 'lucide-react'
 
 const SearchBox = ({ history }) => {
-  const [keyword, setKeyword] = useState('');
+  const [keyword, setKeyword] = useState('')
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  const submitHandler = e => {
+    e.preventDefault()
     if (keyword.trim()) {
-      history.push(`/search/${keyword}`);
+      history.push(`/search/${keyword}`)
     } else {
-      history.push('/');
+      history.push('/')
     }
-  };
+  }
 
   return (
     <Form inline>
@@ -20,27 +20,31 @@ const SearchBox = ({ history }) => {
         <Form.Control
           type='text'
           name='q'
-          onChange={(e) => setKeyword(e.target.value)}
+          onChange={e => setKeyword(e.target.value)}
           placeholder='Search Products...'
           style={{
-            color: 'white',
-            outline: '#f0b90b',
-            backgroundColor: '#1e2329',
-            border: '1px solid #f0b90b',
+            color: '#2c3e50',
+            outline: 'none',
+            backgroundColor: 'white',
+            border: '1px solid #28a745',
             borderRadius: '5px',
             textAlign: 'center',
             fontSize: '1rem',
-            fontWeight: '900',
+            fontWeight: 'bold'
           }}
         />
         <InputGroup.Append>
-          <Button type='submit' onClick={submitHandler} style={{ backgroundColor: '#1e2329', border: 'none' }}>
-            <Search style={{ color: '#f0b90b' }} />
+          <Button
+            type='submit'
+            onClick={submitHandler}
+            style={{ backgroundColor: '#28a745', border: 'none' }}
+          >
+            <Search style={{ color: 'white' }} />
           </Button>
         </InputGroup.Append>
       </InputGroup>
     </Form>
-  );
-};
+  )
+}
 
-export default SearchBox;
+export default SearchBox
