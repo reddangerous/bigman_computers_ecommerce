@@ -59,8 +59,8 @@ const App = () => {
             component={HomeScreen}
             exact
           />
-          <Route path='/' component={HomeScreen} exact />
-          <Route path='/landing' component={LandingPage} />
+          <Route path='/' component={HomeScreen} />
+          <Route path='/landing' component={LandingPage} exact/>
         </Container>
       </main>
       <Footer />
